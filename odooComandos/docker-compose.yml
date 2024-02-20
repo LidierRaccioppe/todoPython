@@ -1,0 +1,44 @@
+#  Version del docker
+version: '3.1'
+# Los servicios que hara la aplicacion
+services:
+  # Nombre del contenedor
+  dam_odoo_dev:
+    # Imagen que contendra el contenedor, acompañado de una etiqueta o su version
+    # Odoo es un ERP gratis y libre
+    image: odoo:16.0
+    # indica que se debe de lanzar lo siguiente antes de comenzarse este servicio
+    depends_on:
+      - dam_postgresOdoo_dev
+    # Puertos que mapearemos para su uso ya sea dentro o fuera
+    # Puerto nativo : Puerto Docker
+    ports:
+      - 8069:8069
+    # Volumen compartido del docker
+    volumes:
+      - ./extra-addons:/mnt/extra-addons
+    # Variables de Entorno de este servicio especifico, ver su docker hub para la informacion especifica
+    environment:
+      # El nombre de la ip del gestor de bases de datos, en docker sirve con el nombre del contenedor
+      - HOST=dam_postgresOdoo_dev
+      # El usuario con el que odoo intentara hacer su instalacion de necesidades
+      - USER=castelao
+      # La contraseña del usuario con el que odoo intentara hacer su instalacion de necesidades
+      - PASSWORD=castelao
+  # Nombre del contenedor
+  dam_postgresOdoo_dev:
+    # Imagen que contendra el contenedor, acompañado de una etiqueta o su version
+    # Base de datos
+    image: postgres:15    # indica que se debe de lanzar lo siguiente antes de comenzarse este servicio
+    # Puertos que mapearemos para su uso ya sea dentro o fuera
+    # Puerto nativo : Puerto Docker
+    ports:
+      - 5432:5432
+    # Variables de Entorno de este servicio especifico, ver su docker hub para la informacion especifica
+    environment:
+      # El nombre de la base de datos por defecto que se creara de no existir
+      - POSTGRES_DB=postgres
+      # La contraseña que tendra el super usuario de postgres
+      - POSTGRES_PASSWORD=castelao
+      # El nombre que tendra el super usuario que crea postgres
+      - POSTGRES_USER=castelao
