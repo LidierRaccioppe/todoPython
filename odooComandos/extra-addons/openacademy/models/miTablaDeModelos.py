@@ -7,6 +7,7 @@ class TestModel(models.Model):
 
     name = fields.Char(string="Nombre")
     description = fields.Text(string="Descripción")
+
 # from odoo import models, fields, api
 
 
