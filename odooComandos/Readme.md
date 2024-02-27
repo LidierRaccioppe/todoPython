@@ -15,6 +15,7 @@ datos con lo necesario para ser usado en odoo.
 
 Para terminar se debe de cambiar los permisos para que desde fuera de la terminal podamos hacer cambios comodamente,
 el comando es `chmod -R 777 openacademy/`.
+
 ## Conexion con la base de datos
 
 Se hace un docker compose up para levantar el odoo. Y hacer ahora la conexion con pycharm.
@@ -47,7 +48,7 @@ Lo primero es para que utiliza como datos la estructura xml que le daremos.
 Y lo segundo es para establecerle el modo que se debe de mostrar luego en odoo con sus datos para que asi pueda verlos
 usando los datos al darle los permisos necesarios.
 
-## Creacion de tabla en la base de datos
+## Manejo de la tabla en la base de datos
 
 Para darle los datos sobre los que queremos que trabaje.
 
@@ -55,7 +56,25 @@ Se debe de reinicar el conteneder que tenga el odoo y el que tenga la base de da
 conexion de pycharm darle a la opcion de mostrar todas la tablas y luego ir a public/tables y buscar la tabla con el 
 nombre del modelo que se la haya dado en el archivo del modelo propio.
 
-## Punto desconocido
+![tabla](./imagenes/tabla.png)
+
+## Agregar el XML
+
+Tal y como se añadio en la parte del manifest de openacademy, se debe de añadir el archivo `datos.xml` en la carpeta de 
+data. Con el siguiente contenido:
+
+```python
+<odoo>
+    <data>
+        <record model="test_model" id="openacademy.nombres">
+            <field name="name">Pepe</field> <!-- El nombre debe ser el mismo que la variable del modelo -->
+            <field name="description">50</field> <!-- El nombre debe ser el mismo que la variable del modelo -->
+        </record>
+    </data>
+</odoo>
+```
+
+## Configuración de la vista
 
 En `openacademy/views/views.xml` se descomentan las siguietes lineas:
 - los action del modelo
@@ -63,8 +82,29 @@ En `openacademy/views/views.xml` se descomentan las siguietes lineas:
 - el menu category
 - el action con el action_windows
 
+## Configuración de los datos
 En `openacademy/security/ir.model.access.csv` se debe de cambiar la columna del id por `model_NombreDelModelo` en mi caso es `test_model`
 
 recordar los otros del mafest de habilitar el security, cambiar el nombre del modelo con el que tiene el modelo 
 (test_model en mi caso), y luego en los actions cambiar lo del openacademy.opencademy por el nombre del modelo
+
+## Manejo en Odoo
+
+Se empezaria por hacer un restart al contenedor con odoo.
+
+Se comenzaria por ir a configuracion y activar el modo de desarrollador.
+
+Para luego ir a la pagina de odoo y buscar el openacademy, activarlo y e ir a la seccion superior de seleccion de 
+modulos y ver como tiene los datos previos dados.
+
+![datosOdoo](./imagenes/odooDatos.png)
+
+
+Se puede comprobar como se añaden los datos a la tabla si lo hacemos desde Odoo.
+
+![meterDatos](./imagenes/meterOdoo.png)
+
+Abajo se puede ver como se metieron los datos en la tabla, que se puede ver en Pycharm.
+
+![tablaDatosMetidos](./imagenes/tablaDatosMetidos.png)
 
